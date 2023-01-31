@@ -45,20 +45,22 @@ public class Racer {
         //TODO Define all other variables needed at setup
 
         //TODO Read in images
+        try { //TODO add pictures and pathnames to said pictures
+            track = ImageIO.read(new File("src/images/track(rough draft).png"));
+            playerOne = ImageIO.read(new File("src/images/bmwtop.png"));
+            playerTwo = ImageIO.read(new File("src/images/poschetop.png"));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
     public static class Animate implements Runnable {
         public void run() {
             while (endgame == false) {
-                //TODO Replace draw functions below with ours for racer game
-//                backgroundDraw();
-//                asteroidsDraw();
-//                explosionsDraw();
-//                enemyBulletsDraw();
-//                enemyDraw();
-//                playerBulletsDraw();
-//                playerDraw();
-//                flameDraw();
+                trackDraw();
+                playerOneDraw();
+                playerTwoDraw();
+
                 try {
                     Thread.sleep(32);
                 } catch (InterruptedException e) {
@@ -97,7 +99,32 @@ public class Racer {
         }
     }
 
-    //TODO Add Draw functions
+    private static void trackDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+
+        //TODO Look into offset variables and their purpose
+        g2D.drawImage(track, XOFFSET, YOFFSET, null);
+    }
+
+    private static void playerOneDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+
+        //TODO Offsets here too
+        g2D.drawImage(playerOne, XOFFSET, YOFFSET, null);
+
+    }
+
+    private static void playerTwoDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+
+        //TODO Same here
+        g2D.drawImage(playerTwo, XOFFSET, YOFFSET, null);
+
+    }
+
 
     private static class KeyPressed extends AbstractAction{
         public KeyPressed(){
@@ -190,7 +217,7 @@ public class Racer {
 //            generateAsteroids();
 //            endgame = false;
 //
-//            Thread t1 = new Thread(new Animate());
+            Thread t1 = new Thread(new Animate());
 //            Thread t2 = new Thread(new PlayerMover());
 //            Thread t3 = new Thread(new FlameMover());
 //            Thread t4 = new Thread(new AsteroidsMover());
@@ -200,7 +227,7 @@ public class Racer {
 //            Thread t8 = new Thread(new CollisionChecker());
 //            Thread t9 = new Thread(new WinChecker());
 
-//            t1.start();
+            t1.start();
 //            t2.start();
 //            t3.start();
 //            t4.start();
@@ -392,8 +419,10 @@ public class Racer {
 
     private static Boolean endgame;
     private static Boolean enemyAlive;
-    private static BufferedImage background;
-    private static BufferedImage player;
+    private static BufferedImage track;
+    private static BufferedImage playerOne;
+    private static BufferedImage playerTwo;
+
 
     private static Boolean upPressed;
     private static Boolean downPressed;
