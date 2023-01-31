@@ -376,6 +376,7 @@ public class Racer {
         private double comY;
     }
 
+
     private static Boolean endgame;
     private static Boolean enemyAlive;
     private static BufferedImage background;
