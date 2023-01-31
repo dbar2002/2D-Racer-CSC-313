@@ -212,6 +212,19 @@ public class Racer {
         }
     }
 
+    public static void main(String[] args) {
+        setup();
+        appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        appFrame.setSize(501, 585);
+
+        JPanel myPanel = new JPanel();
+
+        //TODO Look at Asteroids.java. We'll need some more setup code here
+
+        appFrame.getContentPane().add(myPanel, "South");
+        appFrame.setVisible(true);
+    }
+
     private static class ImageObject{
         public ImageObject (){}
 
