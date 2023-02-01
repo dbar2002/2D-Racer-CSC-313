@@ -71,18 +71,52 @@ public class Racer {
     }
 
     private static class PlayerMover implements Runnable {
+        private double velocitystep;
+        private double rotatestep;
+
         public PlayerMover() {
             velocitystep = 0.01;
             rotatestep = 0.01;
         }
 
         public void run() {
-            //TODO Add Racer controls. Look at PlayerMover in Asteroids
             //Note Because we have two players we have to pass in a player object or create multiple instances of PlayerMover
+            while(endgame == false) {
+                try {
+                    Thread.sleep(10);
+                } catch(InterruptedException e) {
+
+                }
+
+                if(upPressed == true) {
+                    p1velocity = p1velocity + velocitystep;
+                }
+
+                if(downPressed == true) {
+                    p1velocity = p1velocity - velocitystep;
+                }
+
+                if(leftPressed == true) {
+                    if(p1velocity < 0) {
+                        p1.rotate(-rotatestep);
+                    } else {
+                        p1.rotate(rotatestep);
+                    }
+                }
+
+                if(rightPressed == true) {
+                    if(p1velocity < 0) {
+                        p1.rotate(rotatestep);
+                    } else {
+                        p1.rotate(-rotatestep);
+                    }
+                }
+
+                p1.move(-p1velocity * Math.cos(p1.getAngle() - pi / 2.0), p1velocity * Math.sin(p1.getAngle() - pi / 2.0));
+                p1.screenWrap(XOFFSET, XOFFSET + WINWIDTH, YOFFSET, YOFFSET + WINHEIGHT);
+            }
         }
 
-        private double velocitystep;
-        private double rotatestep;
     }
 
     //TODO If the racetrack takes up the entire window this isn't needed but if we have the track zoomed in we need a TrackMover class similar to PlayerMover
