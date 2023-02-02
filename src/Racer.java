@@ -123,7 +123,7 @@ public class Racer {
 
             //default images for the game
             gameCover = ImageIO.read(new File("src/images/coverlogo.png"));
-            background = ImageIO.read(new File("src/images/track(rough draft).png"));
+            background = ImageIO.read(new File("src/images/track1.png"));
             player = ImageIO.read(new File("src/images/supratopview.png"));
             player2 = ImageIO.read(new File("src/images/poschetop.png"));
             //vehicle choices
