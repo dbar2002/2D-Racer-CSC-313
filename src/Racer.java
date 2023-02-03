@@ -627,15 +627,15 @@ public class Racer {
         Stroke oldStroke = g2d.getStroke();
 
         g2d.setColor(Color.ORANGE);
-        g2d.fillRect(215, 40, 275, 115);
+        g2d.fillRect(30, 40, 275, 115);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(5));
-        g2d.drawRect(215, 40, 275, 115);
+        g2d.drawRect(30, 40, 275, 115);
         g2d.setStroke(oldStroke);
         g2d.setFont(new Font("ARIAL", Font.BOLD, 26));
-        g2d.drawString(df.format(sec) + " seconds", 225, 75);
-        g2d.drawString("Player 1 Laps: " + p1CurrentLap + "/" + maxLaps, 225, 110);
-        g2d.drawString("Player 2 Laps: " + p2CurrentLap + "/" + maxLaps, 225, 140);
+        g2d.drawString(df.format(sec) + " seconds", 35, 75);
+        g2d.drawString("Player 1 Laps: " + p1CurrentLap + "/" + maxLaps, 35, 110);
+        g2d.drawString("Player 2 Laps: " + p2CurrentLap + "/" + maxLaps, 35, 140);
     }
 
     private static void drawSpeed() {
@@ -643,14 +643,14 @@ public class Racer {
         Graphics g = appFrame.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLUE);
-        g2d.fillRect(725, 40, 225, 100);
+        g2d.fillRect(500, 40, 225, 100);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(5));
-        g2d.drawRect(725, 40, 225, 100);
+        g2d.drawRect(500, 40, 225, 100);
         DecimalFormat df = new DecimalFormat("###");
         g2d.setFont(new Font("ARIAL", Font.BOLD, 22));
-        g2d.drawString("P1 Speed: " + df.format(p1Velocity * 20) + " MPH", 730, 90);
-        g2d.drawString("P2 Speed: " + df.format(p2Velocity * 20) + " MPH", 730, 130);
+        g2d.drawString("P1 Speed: " + df.format(p1Velocity * 20) + " MPH", 505, 90);
+        g2d.drawString("P2 Speed: " + df.format(p2Velocity * 20) + " MPH", 505, 130);
     }
 
     private static void drawPlayer() {
