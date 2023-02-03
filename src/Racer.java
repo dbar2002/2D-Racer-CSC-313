@@ -76,10 +76,10 @@ public class Racer {
     private static JComboBox vehicleList2;
     private static int p1CurrentLap = 1;
     private static int p2CurrentLap = 1;
-    private static BufferedImage pattyWagon;
-    private static BufferedImage boatMobile;
-    private static BufferedImage bus;
-    private static BufferedImage boulder;
+    private static BufferedImage Porshe;
+    private static BufferedImage BMW;
+    private static BufferedImage Supra;
+    private static BufferedImage Toyota;
     private static BufferedImage[] barriers;
     private static AudioInputStream ais;
     private static Clip wav1;
@@ -123,12 +123,9 @@ public class Racer {
 
             //default images for the game
             gameCover = ImageIO.read(new File("src/images/coverlogo.png"));
-            background = ImageIO.read(new File("src/images/track1.png"));
+            background = ImageIO.read(new File("src/images/track(rough draft).png"));
             player = ImageIO.read(new File("src/images/supratopview.png"));
             player2 = ImageIO.read(new File("src/images/poschetop.png"));
-            //vehicle choices
-            bus = ImageIO.read(new File("img/bus.png"));
-            boulder = ImageIO.read(new File("img/boulder.png"));
 
         } catch (IOException ioe) {
 
@@ -143,7 +140,7 @@ public class Racer {
     public static void main(String[] args) {
         setup();
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        appFrame.setSize(1320, 937);
+        appFrame.setSize(250, 250);
 
         JPanel myPanel = new JPanel();
         Cover();
@@ -192,7 +189,6 @@ public class Racer {
         bindKey(myPanel, "S");
         bindKey(myPanel, "A");
         bindKey(myPanel, "D");
-        bindKey(myPanel, "F");
 
         appFrame.getContentPane().add(myPanel, "South");
         appFrame.setVisible(true);
@@ -246,6 +242,7 @@ public class Racer {
                 drawSpeed();
 
                 if (p1CurrentLap >= maxLaps + 1) {
+                    drawWinner("Player 1");
                     drawWinner("Player 1");
                     g2d.setFont(new Font("TimesRoman", Font.BOLD, 40));
                     g2d.setColor(Color.GREEN);
@@ -305,13 +302,13 @@ public class Racer {
 
     public static BufferedImage vehiclePick(BufferedImage playervehicle, int n) {
         if (n == 0)
-            playervehicle = pattyWagon;
+            playervehicle = Porshe;
         else if (n == 1)
-            playervehicle = boatMobile;
+            playervehicle = BMW;
         else if (n == 2)
-            playervehicle = bus;
+            playervehicle = Supra;
         else
-            playervehicle = boulder;
+            playervehicle = Toyota;
         return playervehicle;
     }
 
@@ -434,7 +431,7 @@ public class Racer {
             return playerCheck.getX() < 175 && playerCheck.getX() > -9 && playerCheck.getY() > 550 && playerCheck.getY() < 800;
         }
         public static boolean hitEndOfMap(ImageObject playerCheck) {
-            return playerCheck.getX() >= 1310 || playerCheck.getX() <= 10 || playerCheck.getY() >= 920 || playerCheck.getY() <= 15;
+            return playerCheck.getX() >= 1000 || playerCheck.getX() <= 10 || playerCheck.getY() >= 920 || playerCheck.getY() <= 15;
         }
 
         public static boolean hitPlayer(ImageObject p1, ImageObject p2) {
@@ -443,11 +440,11 @@ public class Racer {
         }
 
         public static boolean passedLap(ImageObject playerCheck) {
-            return playerCheck.getX() >= 1000 && playerCheck.getX() <= 1130 && playerCheck.getY() >= 560 && playerCheck.getY() <= 570;
+            return playerCheck.getX() >= 142 && playerCheck.getX() <= 142 && playerCheck.getY() >= 154 && playerCheck.getY() <= 166;
         }
 
         public static boolean passedMidLap(ImageObject playerCheck) {
-            return playerCheck.getX() >= 270 && playerCheck.getX() <= 370 && playerCheck.getY() >= 560 && playerCheck.getY() <= 570;
+            return playerCheck.getX() >= 46 && playerCheck.getX() <= 62 && playerCheck.getY() >= 121 && playerCheck.getY() <= 121;
         }
 
         public void run() {
@@ -629,7 +626,7 @@ public class Racer {
         float sec = (end - start) / 1000f;
         Stroke oldStroke = g2d.getStroke();
 
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(Color.ORANGE);
         g2d.fillRect(215, 40, 275, 115);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(5));
@@ -645,7 +642,7 @@ public class Racer {
 
         Graphics g = appFrame.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.CYAN);
+        g2d.setColor(Color.BLUE);
         g2d.fillRect(725, 40, 225, 100);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(5));
