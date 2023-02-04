@@ -57,7 +57,7 @@ public class Racer {
     private static double p2OriginalX;
     private static double p2OriginalY;
     private static double p2Velocity;
-    private static int maxSpeed;
+    private static double maxSpeed;
     private static int xOffset;
     private static int yOffset;
     private static double pi;
@@ -68,6 +68,8 @@ public class Racer {
     private static long bestTimePlayer1 = Integer.MAX_VALUE;
     private static long bestTimePlayer2 = Integer.MAX_VALUE;
     private static JFrame appFrame;
+    private static JPanel titleScreen;
+    private static JPanel menuPanel;
     private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
     private static int maxLaps;
     private static int currentLap;
@@ -101,7 +103,7 @@ public class Racer {
         twoPi = 2 * pi;
         endgame = false;
 
-        maxSpeed = 5;
+        maxSpeed = 4;
         maxLaps = 5;
         currentLap = 1;
 
@@ -110,11 +112,11 @@ public class Racer {
         pWidth = 50;
 
         //initial coords for the players
-        p1OriginalX = 500; //(double) xOffset + ((double) winWidth / 2.0) - (pWidth / 2.0) + 400;
-        p1OriginalY = 0; //(double) yOffset + ((double) winHeight / 2.0) - (pHeight / 2.0) + 50;
+        p1OriginalX = 295; //(double) xOffset + ((double) winWidth / 2.0) - (pWidth / 2.0) + 400;
+        p1OriginalY = 316; //(double) yOffset + ((double) winHeight / 2.0) - (pHeight / 2.0) + 50;
 
-        p2OriginalX = 600; //(double) xOffset + ((double) winWidth / 2.0) - (pWidth / 2.0) + 400;
-        p2OriginalY = 325; //(double) yOffset + ((double) winHeight / 2.0) - (pHeight / 2.0) + 100;
+        p2OriginalX = 295; //(double) xOffset + ((double) winWidth / 2.0) - (pWidth / 2.0) + 400;
+        p2OriginalY = 332; //(double) yOffset + ((double) winHeight / 2.0) - (pHeight / 2.0) + 100;
 
         System.out.println("P1 x: " + p1OriginalX + ", P1 y: " + p1OriginalY);
         System.out.println("P2 x: " + p2OriginalX + ", P2 y: " + p2OriginalY);
@@ -123,9 +125,10 @@ public class Racer {
 
             //default images for the game
             gameCover = ImageIO.read(new File("src/images/coverlogo.png"));
-            background = ImageIO.read(new File("src/images/track1.png"));
-            player = ImageIO.read(new File("src/images/supratopview.png"));
-            player2 = ImageIO.read(new File("src/images/poschetop.png"));
+            background = ImageIO.read(new File("src/images/track2.png"));
+            player = ImageIO.read(new File("src/images/supratopview2.png"));
+            player2 = ImageIO.read(new File("src/images/porschetop2.png"));
+
 
         } catch (IOException ioe) {
 
@@ -140,67 +143,68 @@ public class Racer {
     public static void main(String[] args) {
         setup();
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        appFrame.setSize(250, 250);
+        appFrame.setSize(600, 592);
+        appFrame.setResizable(false);
 
-        JPanel myPanel = new JPanel();
-        Cover();
+        menuPanel = new JPanel();
+        Cover(titleScreen);
 
         //start game button
         JButton newGameButton = new JButton("New Game");
         newGameButton.addActionListener(new StartGame());
-        myPanel.add(newGameButton);
+        menuPanel.add(newGameButton);
 
         //select laps drop down menu
         Integer[] laps = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         JLabel lapText = new JLabel("Select Laps");
         lapList = new JComboBox(laps);
-        myPanel.add(lapText);
-        myPanel.add(lapList);
+        menuPanel.add(lapText);
+        menuPanel.add(lapList);
         lapList.addActionListener(new LapListener());
 
         //select vehicle player 1 drop down
         String[] vehicles = new String[]{"Supra", "Porshe", "BMW", "Toyota"};
         JLabel vehicleText1 = new JLabel("Player 1");
         vehicleList = new JComboBox(vehicles);
-        myPanel.add(vehicleText1);
-        myPanel.add(vehicleList);
+        menuPanel.add(vehicleText1);
+        menuPanel.add(vehicleList);
         vehicleList.addActionListener(new vehicleListener1());
 
         //select vehicle player 2 drop down
         JLabel vehicleText2 = new JLabel("Player 2");
         vehicleList2 = new JComboBox(vehicles);
-        myPanel.add(vehicleText2);
-        myPanel.add(vehicleList2);
+        menuPanel.add(vehicleText2);
+        menuPanel.add(vehicleList2);
         vehicleList2.addActionListener(new vehicleListener2());
 
         //quit game button
         JButton quitButton = new JButton("Quit Game");
         quitButton.addActionListener(new QuitGame());
-        myPanel.add(quitButton);
+        menuPanel.add(quitButton);
 
         //controls for player 1
-        bindKey(myPanel, "UP");
-        bindKey(myPanel, "DOWN");
-        bindKey(myPanel, "LEFT");
-        bindKey(myPanel, "RIGHT");
+        bindKey(menuPanel, "UP");
+        bindKey(menuPanel, "DOWN");
+        bindKey(menuPanel, "LEFT");
+        bindKey(menuPanel, "RIGHT");
 
         //controls for player 2
-        bindKey(myPanel, "W");
-        bindKey(myPanel, "S");
-        bindKey(myPanel, "A");
-        bindKey(myPanel, "D");
+        bindKey(menuPanel, "W");
+        bindKey(menuPanel, "S");
+        bindKey(menuPanel, "A");
+        bindKey(menuPanel, "D");
 
-        appFrame.getContentPane().add(myPanel, "South");
+        appFrame.getContentPane().add(menuPanel, "South");
         appFrame.setVisible(true);
     }
 
-    public static void Cover() {
+    public static void Cover(JPanel container) {
         image = new ImageIcon("src/images/coverlogo.png").getImage();
 
-        JPanel container = new MyBackground();
+        container = new MyBackground();
         appFrame.add(container);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        appFrame.setSize(750, 1500);
+        appFrame.setSize(590, 565);
         appFrame.setVisible(true);
         try {
             //play music
@@ -231,6 +235,7 @@ public class Racer {
     }
 
     private static class Animate implements Runnable {
+
         Graphics g = appFrame.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
 
@@ -240,6 +245,8 @@ public class Racer {
                 drawPlayer();
                 drawClock();
                 drawSpeed();
+                drawPlayer();
+
 
                 if (p1CurrentLap >= maxLaps + 1) {
                     drawWinner("Player 1");
@@ -263,7 +270,7 @@ public class Racer {
                 }
 
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     System.out.println("Exception caught in Animate");
                 }
@@ -315,8 +322,10 @@ public class Racer {
 
     private static class StartGame implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+//            appFrame.remove(titleScreen);
+//            appFrame.remove(menuPanel);
 
-            // endgame = true;
+            endgame = true;
             start = System.currentTimeMillis();
             upPressed = false;
             downPressed = false;
@@ -329,8 +338,8 @@ public class Racer {
             dPressed = false;
 
             //instantiate the ImageObjects for the player vehicles
-            p1 = new ImageObject(p1OriginalX, p1OriginalY, pWidth, pHeight, 0.0);
-            p2 = new ImageObject(p2OriginalX, p2OriginalY, pWidth, pHeight, 0.0);
+            p1 = new ImageObject(p1OriginalX, p1OriginalY, pWidth, pHeight, -Math.PI / 2);
+            p2 = new ImageObject(p2OriginalX, p2OriginalY, pWidth, pHeight, -Math.PI / 2);
 
             p1Velocity = 0.0;
             p2Velocity = 0.0;
@@ -358,7 +367,7 @@ public class Racer {
             Thread t1 = new Thread(new Animate());
             Thread t2 = new Thread(new PlayerMover());
             Thread t3 = new Thread(new CollisionChecker());
-            Thread t4 = new Thread(new WinChecker());
+            //Thread t5 = new Thread(new WinChecker());
             t1.start();
             t2.start();
             //t3.start();
@@ -405,38 +414,11 @@ public class Racer {
         //level of acceleration and rotation speed
         public PlayerMover() {
             velocityStep = 0.01;
-            rotateStep = 0.03;
+            rotateStep = 0.02;
         }
 
-        private void changeVelocity(double playerVelocity) {
-            if (playerVelocity > 0) {
-                velocityStep -= 0.01 * 1;
-            } else {
-                velocityStep += 0.01 * 1;
-            }
-        }
-        public static boolean inBounds(ImageObject playerCheck) {
-            return playerCheck.getX() < 1123 && playerCheck.getX() > 207 && playerCheck.getY() > 216 && playerCheck.getY() < 837;
-        }
-        public static boolean inBoundsInner(ImageObject playerCheck) {
-            return playerCheck.getX() < 970 && playerCheck.getX() > 375 && playerCheck.getY() > 375 && playerCheck.getY() < 670;
-        }
-        public static boolean hitBlueTent(ImageObject playerCheck) {
-            return playerCheck.getX() > 445 && playerCheck.getX() < 815 && playerCheck.getY() > 28 && playerCheck.getY() < 175;
-        }
-        public static boolean hitBrownHouse(ImageObject playerCheck) {
-            return playerCheck.getX() < 205 && playerCheck.getX() > -9 && playerCheck.getY() > 190 && playerCheck.getY() < 420;
-        }
-        public static boolean hitRedHouse(ImageObject playerCheck) {
-            return playerCheck.getX() < 175 && playerCheck.getX() > -9 && playerCheck.getY() > 550 && playerCheck.getY() < 800;
-        }
-        public static boolean hitEndOfMap(ImageObject playerCheck) {
-            return playerCheck.getX() >= 1000 || playerCheck.getX() <= 10 || playerCheck.getY() >= 920 || playerCheck.getY() <= 15;
-        }
-
-        public static boolean hitPlayer(ImageObject p1, ImageObject p2) {
-            return (((p1.getX()) > p2.getX()) && ((p1.getX() - 25) < p2.getX()) &&
-                    ((p1.getY()) < p2.getY()) && ((p2.getY() - 25) < p1.getY()));
+        public boolean onTrack() {
+            return true;
         }
 
         public static boolean passedLap(ImageObject playerCheck) {
@@ -461,93 +443,55 @@ public class Racer {
                     if (prevLap < bestTimePlayer1) bestTimePlayer1 = prevLap;
                 }
 
-                if (upPressed && !inBounds(p1)) {
-                    p1Velocity = (double) maxSpeed * 0.8;
-                } else if (wPressed && !inBounds(p2)) {
-                    p2Velocity = (double) maxSpeed * 0.8;
+                //Player One
+                if(upPressed && p1Velocity < maxSpeed) {
+                    p1Velocity += velocityStep;
+                }
+                else if((downPressed) && p1Velocity > -maxSpeed) {
+                    p1Velocity -= velocityStep;
+                }else {
+                    if(p1Velocity != 0) {
+                        if(p1Velocity > 0) {
+                            p1Velocity -=velocityStep;
+                        } else {
+                            p1Velocity +=velocityStep;
+                        }
+                    }
+                }
+                if(rightPressed) {
+                    p1.rotate(-rotateStep);
+
+                }
+                else if(leftPressed) {
+                    p1.rotate(rotateStep);
                 }
 
-                if (upPressed && inBoundsInner(p1)) {
-                    p1Velocity = (double) maxSpeed * 0.08;
-                } else if (wPressed && inBoundsInner(p2)) {
-                    p2Velocity = (double) maxSpeed * 0.08;
+                //Player2
+                if(wPressed && p2Velocity < maxSpeed) {
+                    p2Velocity += velocityStep;
                 }
-                if (hitBlueTent(p1) || hitBrownHouse(p1) || hitRedHouse(p1) || hitEndOfMap(p1) || hitPlayer(p1, p2)) {
-                    p1Velocity = 0;
-                    p1Velocity -= velocityStep * 100;
-                } else if (hitBlueTent(p2) || hitBrownHouse(p2) || hitRedHouse(p2) || hitEndOfMap(p2) || hitPlayer(p2, p1)) {
-                    p2Velocity = 0;
-                    p2Velocity -= velocityStep * 100;
+                else if((sPressed) && p2Velocity > -maxSpeed) {
+                    p2Velocity -= velocityStep;
+                }else {
+                    if(p2Velocity != 0) {
+                        if(p2Velocity > 0) {
+                            p2Velocity -=velocityStep;
+                        } else {
+                            p2Velocity +=velocityStep;
+                        }
+                    }
                 }
-
-                if (passedLap(p2) && p2Timer > 2000) {
-                    p2CurrentLap += 1;
-                    long prevLap = System.currentTimeMillis() - startPlayer2;
-                    startPlayer2 = System.currentTimeMillis();
-                    if (prevLap < bestTimePlayer2) bestTimePlayer2 = prevLap;
+                if(dPressed) {
+                    p2.rotate(-rotateStep);
+                }
+                else if(aPressed) {
+                    p2.rotate(rotateStep);
                 }
 
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     System.out.println("Exception caught for PlayerMover");
-                }
-
-                if (upPressed && p1Velocity < maxSpeed && inBounds(p1)) {
-                    p1Velocity += velocityStep * 4;
-                } else if (wPressed && p2Velocity < maxSpeed && inBounds(p2)) {
-                    p2Velocity += velocityStep * 4;
-                }
-
-                if (hitPlayer(p1, p2) || hitPlayer(p2, p1)) {
-                    wav2.setFramePosition(0);
-                    wav2.start();
-                }
-
-                if (!upPressed && !downPressed && p1Velocity > 0) {
-                    p1Velocity -= velocityStep * 3;
-                } else if (!wPressed && !sPressed && p2Velocity > 0) {
-                    p2Velocity -= velocityStep * 3;
-                }
-
-                if (upPressed && downPressed && p1Velocity < 0) {
-                    p1Velocity += velocityStep * 3;
-                } else if (wPressed && sPressed && p2Velocity < 0) {
-                    p2Velocity += velocityStep * 3;
-                }
-
-                if (downPressed && p1Velocity * -1 < maxSpeed / 2 && inBounds(p1))
-                    p1Velocity -= velocityStep * 5;
-                else if (sPressed && p2Velocity * -1 < maxSpeed / 2 && inBounds(p2)) {
-                    p2Velocity -= velocityStep * 5;
-                }
-
-                if (leftPressed) {
-                    if (p1Velocity < 0)
-                        p1.rotate(-rotateStep);
-                    else
-                        p1.rotate(rotateStep);
-                }
-
-                if (aPressed) {
-                    if (p2Velocity < 0)
-                        p2.rotate(-rotateStep);
-                    else
-                        p2.rotate(rotateStep);
-                }
-
-                if (rightPressed) {
-                    if (p1Velocity < 0)
-                        p1.rotate(rotateStep);
-                    else
-                        p1.rotate(-rotateStep);
-                }
-
-                if (dPressed) {
-                    if (p2Velocity < 0)
-                        p2.rotate(rotateStep);
-                    else
-                        p2.rotate(-rotateStep);
                 }
 
                 p1.move(-p1Velocity * Math.cos(p1.getAngle() - pi / 2.0), p1Velocity * Math.sin(p1.getAngle() - pi / 2.0));
@@ -627,15 +571,15 @@ public class Racer {
         Stroke oldStroke = g2d.getStroke();
 
         g2d.setColor(Color.ORANGE);
-        g2d.fillRect(30, 40, 275, 115);
+        g2d.fillRect(appFrame.getWidth() - 140, 30, 125, 55);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(5));
-        g2d.drawRect(30, 40, 275, 115);
+        g2d.drawRect(appFrame.getWidth() - 140, 30, 125, 55);
         g2d.setStroke(oldStroke);
-        g2d.setFont(new Font("ARIAL", Font.BOLD, 26));
-        g2d.drawString(df.format(sec) + " seconds", 35, 75);
-        g2d.drawString("Player 1 Laps: " + p1CurrentLap + "/" + maxLaps, 35, 110);
-        g2d.drawString("Player 2 Laps: " + p2CurrentLap + "/" + maxLaps, 35, 140);
+        g2d.setFont(new Font("ARIAL", Font.BOLD, 12));
+        g2d.drawString(df.format(sec) + " seconds", appFrame.getWidth() - 130, 45);
+        g2d.drawString("Player 1 Laps: " + p1CurrentLap + "/" + maxLaps, appFrame.getWidth() - 130, 65);
+        g2d.drawString("Player 2 Laps: " + p2CurrentLap + "/" + maxLaps, appFrame.getWidth() - 130, 80);
     }
 
     private static void drawSpeed() {
@@ -643,14 +587,14 @@ public class Racer {
         Graphics g = appFrame.getGraphics();
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLUE);
-        g2d.fillRect(500, 40, 225, 100);
+        g2d.fillRect(appFrame.getWidth() - 140, 95, 125, 45);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(5));
-        g2d.drawRect(500, 40, 225, 100);
+        g2d.drawRect(appFrame.getWidth() - 140, 95, 125, 45);
         DecimalFormat df = new DecimalFormat("###");
-        g2d.setFont(new Font("ARIAL", Font.BOLD, 22));
-        g2d.drawString("P1 Speed: " + df.format(p1Velocity * 20) + " MPH", 505, 90);
-        g2d.drawString("P2 Speed: " + df.format(p2Velocity * 20) + " MPH", 505, 130);
+        g2d.setFont(new Font("ARIAL", Font.BOLD, 12));
+        g2d.drawString("P1 Speed: " + df.format(p1Velocity * 20) + " MPH", appFrame.getWidth() - 130, 110);
+        g2d.drawString("P2 Speed: " + df.format(p2Velocity * 20) + " MPH", appFrame.getWidth() - 130, 125);
     }
 
     private static void drawPlayer() {
@@ -683,17 +627,22 @@ public class Racer {
             while (!endgame) {
                 if (collisionOccurs(p1, p2)) {
                     System.out.println("crashed with other player");
-                    wav2.setFramePosition(0);
-                    wav2.start();
-                    p1Velocity = changeVelocity(p1Velocity);
-                    p2Velocity = changeVelocity(p2Velocity);
+
+
+//                    wav2.setFramePosition(0);
+//                    wav2.start();
+//                    p1Velocity = changeVelocity(p1Velocity);
+//                    p2Velocity = changeVelocity(p2Velocity);
                 }
+                //TODO add below checks
+                //onTrack
+                //inBounds
             }
         }
 
 
         private static double changeVelocity(double playerVelocity) {
-            playerVelocity -= playerVelocity * 2;
+            playerVelocity -= playerVelocity * 1.2;
             return playerVelocity;
         }
     }
