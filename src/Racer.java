@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -62,6 +63,8 @@ public class Racer {
     private static int yOffset;
     private static double pi;
     private static double twoPi;
+    private static double piOvertwo;
+    private static double threePiOverTwo;
     private static long start = System.currentTimeMillis();
     private static long startPlayer1 = System.currentTimeMillis();
     private static long startPlayer2 = System.currentTimeMillis();
@@ -101,6 +104,8 @@ public class Racer {
         //winHeight = 500;
         pi = Math.PI;
         twoPi = 2 * pi;
+        piOvertwo = pi / 2;
+        threePiOverTwo = (3 * pi) / 2;
         endgame = false;
 
         maxSpeed = 4;
@@ -133,6 +138,15 @@ public class Racer {
         } catch (IOException ioe) {
 
         }
+
+//        for (int i = 0; i < background.getWidth(); i++) {
+//            for (int j = 0; j < background.getHeight(); j++) {
+//                int pixelColor = background.getRGB(i,j);
+//                Color c = new Color(pixelColor);
+//                System.out.println(c.toString());
+//                System.out.println(pixelColor);
+//            }
+//        }
 
     }
 
@@ -370,7 +384,7 @@ public class Racer {
             //Thread t5 = new Thread(new WinChecker());
             t1.start();
             t2.start();
-            //t3.start();
+            t3.start();
         }
     }
     private static class QuitGame implements ActionListener {
@@ -417,10 +431,6 @@ public class Racer {
             rotateStep = 0.02;
         }
 
-        public boolean onTrack() {
-            return true;
-        }
-
         public static boolean passedLap(ImageObject playerCheck) {
             return playerCheck.getX() >= 142 && playerCheck.getX() <= 142 && playerCheck.getY() >= 154 && playerCheck.getY() <= 166;
         }
@@ -448,11 +458,11 @@ public class Racer {
                     p1Velocity += velocityStep;
                 }
                 else if((downPressed) && p1Velocity > -maxSpeed) {
-                    p1Velocity -= velocityStep;
+                    p1Velocity -= velocityStep * 3;
                 }else {
                     if(p1Velocity != 0) {
                         if(p1Velocity > 0) {
-                            p1Velocity -=velocityStep;
+                            p1Velocity -=velocityStep * 2;
                         } else {
                             p1Velocity +=velocityStep;
                         }
@@ -475,7 +485,7 @@ public class Racer {
                 }else {
                     if(p2Velocity != 0) {
                         if(p2Velocity > 0) {
-                            p2Velocity -=velocityStep;
+                            p2Velocity -=velocityStep * 2;
                         } else {
                             p2Velocity +=velocityStep;
                         }
@@ -612,7 +622,7 @@ public class Racer {
     }
 
     private static AffineTransformOp rotateImageObject(ImageObject obj) {
-        AffineTransform at = AffineTransform.getRotateInstance(-obj.getAngle(), obj.getWidth() / 2.0, obj.getyHeight() / 2.0);
+        AffineTransform at = AffineTransform.getRotateInstance(-obj.getAngle(), obj.getWidth() / 2.0, obj.getHeight() / 2.0);
         return new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
     }
 
@@ -625,19 +635,185 @@ public class Racer {
     private static class CollisionChecker implements Runnable {
         public void run() {
             while (!endgame) {
-                if (collisionOccurs(p1, p2)) {
-                    System.out.println("crashed with other player");
+                boolean hit = false;
 
+                //Collision between cars
 
-//                    wav2.setFramePosition(0);
-//                    wav2.start();
-//                    p1Velocity = changeVelocity(p1Velocity);
-//                    p2Velocity = changeVelocity(p2Velocity);
-                }
-                //TODO add below checks
-                //onTrack
                 //inBounds
+                //System.out.println(p2.getAngle());
+                //System.out.println(hitBottomWall(p2));
+                System.out.println(p1.getY()    );
+
+                if(hitBottomWall(p1)) {
+                    p1Velocity /= 1.5;
+                    hit = true;
+                    if(p1.getAngle() > pi) {
+                        p1.rotate((((3 * pi) / 2) - p1.getAngle()) + p1.getAngle() - pi);
+
+                    } else {
+                        p1.rotate(-((p1.getAngle() - (pi / 2)) + (pi - p1.getAngle())));
+                    }
+                }
+
+                if(hitTopWall(p1)) {
+                    p1Velocity /= 1.5;
+                    hit = true;
+                    if(p1.getAngle() < twoPi && p1.getAngle() > threePiOverTwo) {
+                        p1.rotate(-piOvertwo);
+
+                    } else {
+                        p1.rotate(piOvertwo);
+                    }
+                }
+
+                if(hitRightWall(p1)) {
+                    p1Velocity /= 1.5;
+                    hit = true;
+                    if(p1.getAngle() > threePiOverTwo) {
+                        p1.rotate(piOvertwo);
+
+                    } else {
+                        p1.rotate(-piOvertwo);
+                    }
+                }
+                if(hitLeftWall(p1)) {
+                    p1Velocity /= 1.5;
+                    hit = true;
+                    if(p1.getAngle() > piOvertwo) {
+                        p1.rotate(piOvertwo);
+
+                    } else {
+                        p1.rotate(-piOvertwo);
+                    }
+                }
+                if(hitBottomWall(p2)) {
+                    p2Velocity /= 1.5;
+                    hit = true;
+                    if(p2.getAngle() > pi) {
+                        p2.rotate((((3 * pi) / 2) - p2.getAngle()) + p2.getAngle() - pi);
+
+                    } else {
+                        p2.rotate(-((p2.getAngle() - (pi / 2)) + (pi - p2.getAngle())));
+                    }
+                }
+                if(hitTopWall(p2)) {
+                    p2Velocity /= 1.5;
+                    hit = true;
+                    if(p2.getAngle() < twoPi && p1.getAngle() > threePiOverTwo) {
+                        p2.rotate(-piOvertwo);
+
+                    } else {
+                        p2.rotate(piOvertwo);
+                    }
+                }
+                if(hitRightWall(p2)) {
+                    p2Velocity /= 1.5;
+                    hit = true;
+                    if(p2.getAngle() > threePiOverTwo) {
+                        p2.rotate(piOvertwo);
+
+                    } else {
+                        p2.rotate(-piOvertwo);
+                    }
+                }
+                if(hitLeftWall(p2)) {
+                    p2Velocity /= 1.5;
+                    hit = true;
+                    if(p2.getAngle() > piOvertwo) {
+                        p2.rotate(piOvertwo);
+
+                    } else {
+                        p2.rotate(-piOvertwo);
+                    }
+                }
+
+                //onTrack
+                if(onTrack(p1)) {
+                    maxSpeed = 4;
+                } else {
+                    maxSpeed = 2;
+                }
+                if(onTrack(p2)) {
+                    maxSpeed = 4;
+                } else {
+                    maxSpeed = 2;
+                }
+
+                if(hit) {
+                    try {
+                        Thread.sleep(500);
+                    } catch(InterruptedException e) {
+                        System.out.println("Exception caught for PlayerMover");
+                    }
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch(InterruptedException e) {
+                        System.out.println("Exception caught for PlayerMover");
+                    }
+                }
+
             }
+        }
+
+        private boolean onTrack(ImageObject p) {
+            int offTrack = 0;
+
+            for (int i = 0; i < p.getWidth(); i++) {
+                for (int j = 0; j < p.getHeight(); j++) {
+                    int pixelColor = background.getRGB((int)Math.round(p.getX()) + i, (int)Math.round(p.getY() + j));
+                    if(pixelColor != -11711155 && pixelColor != -4118739) {
+                        offTrack++;
+                    }
+                }
+            }
+            //System.out.println(offTrack);
+            if(offTrack > 1000) {
+                return false;
+            }
+            return true;
+        }
+
+        private boolean hitLeftWall(ImageObject p) {
+            for (int i = 0; i < p.getWidth(); i++) {
+                for (int j = 0; j < p.getHeight(); j++) {
+                    if(isInside(p.getX() + i, p.getY() + j, 15, 0, -5,appFrame.getHeight())) {
+                        return true;
+                    }
+                }
+            }
+            return false;        }
+
+        private boolean hitRightWall(ImageObject p) {
+            for (int i = 0; i < p.getWidth(); i++) {
+                for (int j = 0; j < p.getHeight(); j++) {
+                    if(isInside(p.getX() + i, p.getY() + j, appFrame.getWidth() - 5, 0, appFrame.getWidth() + 5,appFrame.getHeight())) {
+                        return true;
+                    }
+                }
+            }
+            return false;        }
+
+        private boolean hitTopWall(ImageObject p) {
+            for (int i = 0; i < p.getWidth(); i++) {
+                for (int j = 0; j < p.getHeight(); j++) {
+                    if(isInside(p.getX() + i, p.getY() + j, 0, -5, appFrame.getWidth(),15)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private boolean hitBottomWall(ImageObject p) {
+            for (int i = 0; i < p.getWidth(); i++) {
+                for (int j = 0; j < p.getHeight(); j++) {
+                    if(isInside(p.getX() + i, p.getY() + j, 1, appFrame.getHeight() - 2, appFrame.getWidth() + 5,appFrame.getHeight() + 5)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
 
@@ -728,8 +904,8 @@ public class Racer {
         }
 
         return collisionOccursCoordinates(obj1.getX(), obj1.getY(), obj1.getX() + obj1.getWidth(),
-                obj1.getY() + obj1.getyHeight(), obj2.getX(), obj2.getY(), obj2.getX() + obj2.getWidth(),
-                obj2.getY() + obj2.getyHeight());
+                obj1.getY() + obj1.getHeight(), obj2.getX(), obj2.getY(), obj2.getX() + obj2.getWidth(),
+                obj2.getY() + obj2.getHeight());
     }
 
     private static class ImageObject {
@@ -770,7 +946,7 @@ public class Racer {
             return xWidth;
         }
 
-        public double getyHeight() {
+        public double getHeight() {
             return yHeight;
         }
 
@@ -893,5 +1069,7 @@ public class Racer {
                 internalAngle += twoPi;
             }
         }
+
+
     }
 }
