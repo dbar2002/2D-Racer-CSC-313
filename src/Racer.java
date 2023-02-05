@@ -642,7 +642,7 @@ public class Racer {
                 //inBounds
                 //System.out.println(p2.getAngle());
                 //System.out.println(hitBottomWall(p2));
-                System.out.println(p1.getY()    );
+                //System.out.println(p1.getY()    );
 
                 if(hitBottomWall(p1)) {
                     p1Velocity /= 1.5;
@@ -731,12 +731,12 @@ public class Racer {
                 if(onTrack(p1)) {
                     maxSpeed = 4;
                 } else {
-                    maxSpeed = 2;
+                    maxSpeed = 1;
                 }
                 if(onTrack(p2)) {
                     maxSpeed = 4;
                 } else {
-                    maxSpeed = 2;
+                    maxSpeed = 1;
                 }
 
                 if(hit) {
@@ -768,7 +768,7 @@ public class Racer {
                 }
             }
             //System.out.println(offTrack);
-            if(offTrack > 1000) {
+            if(offTrack > 1500) {
                 return false;
             }
             return true;
@@ -777,7 +777,7 @@ public class Racer {
         private boolean hitLeftWall(ImageObject p) {
             for (int i = 0; i < p.getWidth(); i++) {
                 for (int j = 0; j < p.getHeight(); j++) {
-                    if(isInside(p.getX() + i, p.getY() + j, 15, 0, -5,appFrame.getHeight())) {
+                    if(isInside(p.getX() + i, p.getY() + j, 10, 0, -5,appFrame.getHeight())) {
                         return true;
                     }
                 }
